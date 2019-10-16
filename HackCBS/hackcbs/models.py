@@ -2,6 +2,7 @@ from datetime import datetime
 from hackcbs import db, login_manager
 from flask_login import UserMixin
 
+#add __repr__ fuction in the below classes according to needs
 
 @login_manager.user_loader
 def load_patient(user_id):

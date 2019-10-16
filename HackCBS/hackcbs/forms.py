@@ -22,3 +22,29 @@ class PatientRegistrationForm(FlaskForm):
         patient = Patient.query.filter_by(email=email.data).first()
         if patient:
             raise ValidationError('That email is taken. Please choose a different one.')
+
+class DoctorRegistrationForm(FlaskForm):
+    username = StringField('Username',
+                           validators=[DataRequired(), Length(min=2, max=20)])
+    email = StringField('Email',
+                        validators=[DataRequired(), Email()])
+    password = PasswordField('Password', validators=[DataRequired()])
+    confirm_password = PasswordField('Confirm Password',
+                                     validators=[DataRequired(), EqualTo('password')])
+    license_number = StringField('License_number', validators=[DataRequired()])
+    clinic_address = TextAreaField('Address', validators=[DataRequired()])
+    medical_qualification = TextAreaField('Qualification', validators=[DataRequired()])
+
+class AgentRegistrationForm(FlaskForm):
+    username = StringField('Username',
+                           validators=[DataRequired(), Length(min=2, max=20)])
+    email = StringField('Email',
+                        validators=[DataRequired(), Email()])
+    password = PasswordField('Password', validators=[DataRequired()])
+    confirm_password = PasswordField('Confirm Password',
+                                     validators=[DataRequired(), EqualTo('password')])
+    company_name = StringField('Company', validators=[DataRequired()])
+    company_id = StringField('Company_ID', validators=[DataRequired()])
+    agent_id = StringField('Agent_ID', validaors=[DataRequired()])
+    designation = StringField('Designation')
+
