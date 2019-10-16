@@ -27,7 +27,7 @@ class Doctor(db.Model, UserMixin):
     license_number = db.Column(db.String(20), nullable=False, unique=true)
     medical_qualification = db.Column(db.String(400), nullable=False)
 
-class Insurance(db.Model, UserMixin):
+class InsuranceAgent(db.Model, UserMixin):
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(40), unique=True, nullable=False)
     email = db.Column(db.String(120), unique=True, nullable=False)
@@ -38,3 +38,10 @@ class Insurance(db.Model, UserMixin):
     agent_id = db.Column(db.String(20), nullable=False, unique=True)
     agent_designation = db.Column(db.String(50), nullable=False)
 
+class MedicalHistory(db.Model):
+    patient_id = db.Column(db.Integer, nullable = False, unique = True)
+    uploaded_file = db.Column(db.String)
+    patient_notes = db.Column(db.String(1000),default = " ")
+    doctor_remarks = db.Column(db.String(1000), default = " ")
+    date_of_report = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
+    
