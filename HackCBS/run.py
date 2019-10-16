@@ -1,4 +1,4 @@
-from flaskblog import app
+from hackcbs import app
 
 
 if __name__ == '__main__':
