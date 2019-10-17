@@ -7,27 +7,54 @@ from hackcbs import app, db, bcrypt
 from hackcbs.models import Patient, Doctor, InsuranceAgent, MedicalHistory
 from hackcbs.forms import PatientRegistrationForm, DoctorRegistrationForm, AgentRegistrationForm
 
+
 @app.route("/")
 def cover():
     return render_template('cover.html')
 
-@app.route("/register", methods=['GET', 'POST'])
-def register():
-    #modify functions accroding to needs
-    return render_template('register.html')    
+
+@app.route("/register/<int:choice>", methods=['GET', 'POST'])
+def register(choice):
+    if current_user.is_authenticated:
+        return redirect(url_for('home'))
+    else:
+        if choice:
+            if choice == 1:
+                form = PatientRegistrationForm()
+            elif choice == 2:
+                form = DoctorRegistrationForm()
+            elif choice == 3:
+                form = AgentRegistrationForm()
+            return render_template('register.html', choice=choice,  form=form)
+        else:
+            return render_template('register.html')
+
 
 @app.route("/login", methods=['GET', 'POST'])
 def login():
-    #modify function according to needs
+    # modify function according to needs
     return render_template('login.html')
+
 
 @app.route('/patient')
 def patient():
     render_template('patient_home.html')
 
+
+@app.route('/about')
+def about():
+    render_template('patient_home.html')
+
+
+@app.route('/contact')
+def contact():
+    render_template('patient_home.html')
+
+
 @app.route('/doctor')
 def doctor():
-    render_template('doctor_home.html')    
+    render_template('doctor_home.html')
+
 
 @app.route('/insurance')
 def insurance():
