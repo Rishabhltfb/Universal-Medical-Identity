@@ -30,7 +30,7 @@ class Patient(db.Model, UserMixin):
     age = db.Column(db.Integer, nullable=False)
     address = db.Column(db.String(400), nullable=False)
     blood_group = db.Column(db.String(5), default=" ")
-    gender = db.Column(db.String(1), nullable=False)
+    gender = db.Column(db.String(5), nullable=False)
 
 
 class Doctor(db.Model, UserMixin):
@@ -52,7 +52,6 @@ class InsuranceAgent(db.Model, UserMixin):
     password = db.Column(db.String(60), nullable=False)
     company_name = db.Column(db.String(50), unique=True, nullable=False)
     company_id = db.Column(db.String(20), nullable=False, unique=True)
-    agent_name = db.Column(db.String(100), nullable=False)
     agent_id = db.Column(db.String(20), nullable=False, unique=True)
     agent_designation = db.Column(db.String(50), nullable=False)
 

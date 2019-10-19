@@ -17,9 +17,9 @@ class PatientRegistrationForm(FlaskForm):
     confirm_password = PasswordField('Confirm Password',
                                      validators=[DataRequired(), EqualTo('password')])
     age = StringField('Age', validators=[DataRequired(), Length(min=1, max=3)])
-    address = TextAreaField('Address', validators=[DataRequired()])
-    blood_group = StringField('Blood_group')
-    # gender =
+    address = StringField('Address', validators=[DataRequired()])
+    blood_group = StringField('Blood group')
+    gender = StringField("M or F", validators=[DataRequired()])
     submit = SubmitField('Sign Up')
 
     def validate_email(self, email):
