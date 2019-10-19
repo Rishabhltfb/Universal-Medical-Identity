@@ -30,6 +30,7 @@ class Patient(db.Model, UserMixin):
     age = db.Column(db.Integer, nullable=False)
     address = db.Column(db.String(400), nullable=False)
     blood_group = db.Column(db.String(5), default=" ")
+    gender = db.Column(db.String(1), nullable=False)
 
 
 class Doctor(db.Model, UserMixin):
@@ -59,8 +60,11 @@ class InsuranceAgent(db.Model, UserMixin):
 class MedicalHistory(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     patient_id = db.Column(db.Integer, nullable=False, unique=True)
-    uploaded_file = db.Column(db.String)
+    doctor_id = db.Column(db.Integer, nullable=False, unique=True)
+    heading = db.Column(db.String(200), nullable=False)
+    uploaded_file = db.Column(db.String(200), nullable=False)
     patient_notes = db.Column(db.String(1000), default=" ")
     doctor_remarks = db.Column(db.String(1000), default=" ")
     date_of_report = db.Column(
         db.DateTime, nullable=False, default=datetime.utcnow)
+    doctor_name = db.Column(db.String(30), nullable=False)

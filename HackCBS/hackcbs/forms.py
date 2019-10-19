@@ -19,6 +19,7 @@ class PatientRegistrationForm(FlaskForm):
     age = StringField('Age', validators=[DataRequired(), Length(min=1, max=3)])
     address = TextAreaField('Address', validators=[DataRequired()])
     blood_group = StringField('Blood_group')
+    # gender =
     submit = SubmitField('Sign Up')
 
     def validate_email(self, email):
@@ -84,3 +85,30 @@ class AgentRegistrationForm(FlaskForm):
         if agent:
             raise ValidationError(
                 'Someone with this ID is already registered.')
+
+
+class UpdateAccountForm(FlaskForm):
+    name = StringField('Name',
+                       validators=[DataRequired(), Length(min=2, max=20)])
+    email = StringField('Email',
+                        validators=[DataRequired(), Email()])
+    picture = FileField('Update Profile Picture', validators=[
+                        FileAllowed(['jpg', 'png', 'jpeg'])])
+    document = FileField('Update Document', validators=[
+        FileAllowed(['pdf', 'jpg', 'jpeg', 'png'])])
+    submit = SubmitField('Update')
+
+    def validate_email(self, email):
+        if email.data != current_user.email:
+            user = User.query.filter_by(email=email.data).first()
+            if user:
+                raise ValidationError(
+                    'That email is taken. Please choose a different one.')
+
+
+class LoginForm(FlaskForm):
+    email = StringField('Email',
+                        validators=[DataRequired(), Email()])
+    password = PasswordField('Password', validators=[DataRequired()])
+    remember = BooleanField('Remember Me')
+    submit = SubmitField('Login')
