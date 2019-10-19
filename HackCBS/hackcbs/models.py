@@ -49,8 +49,9 @@ class InsuranceAgent(db.Model, UserMixin):
 
 class MedicalHistory(db.Model):
     patient_id = db.Column(db.Integer, nullable = False, unique = True)
+    doctor_id = db.Column(db.Integer, nullable = False, unique = True)
     uploaded_file = db.Column(db.String)
     patient_notes = db.Column(db.String(1000),default = " ")
     doctor_remarks = db.Column(db.String(1000), default = " ")
     date_of_report = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
-    
+    doctor_name = db.Column(db.String(30),nullable=False)
