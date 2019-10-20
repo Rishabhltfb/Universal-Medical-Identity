@@ -2,22 +2,10 @@ from datetime import datetime
 from hackcbs import db, login_manager
 from flask_login import UserMixin
 
-# add __repr__ fuction in the below classes according to needs
-
 
 @login_manager.user_loader
-def load_patient(user_id):
+def patient_user(user_id):
     return Patient.query.get(int(user_id))
-
-
-@login_manager.user_loader
-def load_doctor(user_id):
-    return Doctor.query.get(int(user_id))
-
-
-@login_manager.user_loader
-def load_agent(user_id):
-    return InsuranceAgent.query.get(int(user_id))
 
 
 class Patient(db.Model, UserMixin):
@@ -25,12 +13,15 @@ class Patient(db.Model, UserMixin):
     name = db.Column(db.String(40), nullable=False)
     email = db.Column(db.String(120), unique=True, nullable=False)
     image_file = db.Column(db.String(20), nullable=False,
-                           default='default_patient.jpg')
+                           default='default.jpg')
     password = db.Column(db.String(60), nullable=False)
     age = db.Column(db.Integer, nullable=False)
     address = db.Column(db.String(400), nullable=False)
     blood_group = db.Column(db.String(5), default=" ")
     gender = db.Column(db.String(5), nullable=False)
+
+    def __repr__(self):
+        return f"Patient('{self.name}', '{self.email}', '{self.image_file}', '{self.age}')"
 
 
 class Doctor(db.Model, UserMixin):

@@ -83,3 +83,8 @@ a.article-title:hover {
 .account-heading {
   font-size: 2.5rem;
 }
+
+.acc-nav-img {
+  height: 20px;
+  width: 20px;
+}

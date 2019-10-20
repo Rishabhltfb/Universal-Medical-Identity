@@ -5,7 +5,7 @@ from flask import render_template, url_for, flash, redirect, request, abort
 from flask_login import login_user, current_user, logout_user, login_required
 from hackcbs import app, db, bcrypt
 from hackcbs.models import Patient, Doctor, InsuranceAgent, MedicalHistory
-from hackcbs.forms import PatientRegistrationForm, DoctorRegistrationForm, AgentRegistrationForm, LoginForm
+from hackcbs.forms import PatientRegistrationForm, DoctorRegistrationForm, AgentRegistrationForm, LoginForm, UpdateAccountForm
 
 
 @app.route("/")
@@ -83,7 +83,7 @@ def login():
         if patient and bcrypt.check_password_hash(patient.password, form.password.data):
             login_user(patient, remember=form.remember.data)
             next_page = request.args.get('next')
-            return redirect(next_page) if next_page else redirect(url_for('patient'))
+            return redirect(next_page) if next_page else redirect(url_for('profile'))
         elif doctor and bcrypt.check_password_hash(doctor.password, form.password.data):
             login_user(doctor, remember=form.remember.data)
             next_page = request.args.get('next')
@@ -122,19 +122,6 @@ def insurance():
     return render_template('insurance.html')
 
 
-@app.route('/profile')
-def profile():
-    medical_history = MedicalHistory.query.filter_by(patient_id=current_user.id)\
-        .order_by(MedicalHistory.date_of_report.desc())
-    return render_template('profile.html', medical_history=medical_history)
-
-
-@app.route("/logout")
-def logout():
-    logout_user()
-    return redirect(url_for('home'))
-
-
 def save_picture(form_picture):
     random_hex = secrets.token_hex(8)
     _, f_ext = os.path.splitext(form_picture.filename)
@@ -148,3 +135,33 @@ def save_picture(form_picture):
     i.save(picture_path)
 
     return picture_fn
+
+
+@app.route('/profile')
+def profile():
+    medical_history = MedicalHistory.query.filter_by(patient_id=current_user.id)\
+        .order_by(MedicalHistory.date_of_report.desc())
+    form = UpdateAccountForm()
+    if form.validate_on_submit():
+        if form.picture.data:
+            picture_file = save_picture(form.picture.data)
+            current_user.image_file = picture_file
+        current_user.name = form.name.data
+        current_user.email = form.email.data
+        db.session.commit()
+        flash('Your account has been updated!', 'success')
+        return redirect(url_for('profile'))
+    elif request.method == 'GET':
+        form.name.data = current_user.name
+        form.email.data = current_user.email
+    image_file = url_for(
+        'static', filename='media/' + current_user.image_file)
+    user = Patient.query.filter_by(id=current_user.id).first_or_404()
+
+    return render_template('profile.html', medical_history=medical_history, image_file=image_file, form=form, user=user)
+
+
+@app.route("/logout")
+def logout():
+    logout_user()
+    return redirect(url_for('home'))
