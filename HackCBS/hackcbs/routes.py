@@ -129,7 +129,7 @@ def save_picture(form_picture):
     picture_path = os.path.join(
         app.root_path, 'static/media', picture_fn)
 
-    output_size = (125, 125)
+    output_size = (250, 250)
     i = Image.open(form_picture)
     i.thumbnail(output_size)
     i.save(picture_path)
@@ -137,7 +137,7 @@ def save_picture(form_picture):
     return picture_fn
 
 
-@app.route('/profile')
+@app.route('/profile', methods=['GET', 'POST'])
 def profile():
     medical_history = MedicalHistory.query.filter_by(patient_id=current_user.id)\
         .order_by(MedicalHistory.date_of_report.desc())
